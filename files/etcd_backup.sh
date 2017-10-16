@@ -65,7 +65,7 @@ fi
 # initiate etcd dir backup
 # https://docs.openshift.com/container-platform/3.5/admin_guide/backup_restore.html
 if [[ $? -eq 0 ]]; then
-  /usr/bin/ansible-playbook -i "localhost," -c local /usr/local/etc/pb_etcd_backup.yaml 
+  /usr/bin/ansible-playbook -i "localhost," -c local /usr/local/etc/pb_etcd_backup.yaml -v
     if [[ $? -eq 0 ]]; then
       printf "etcd dir backup successful, logged in ansible logs\n" >> $LOG
     else
