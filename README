@@ -1,0 +1,8 @@
+# ansible playbook to backup etcd following OpenShift's documentation
+# https://docs.openshift.com/container-platform/3.5/admin_guide/backup_restore.html
+# && using reshifter as well
+
+
+### to-do's
+1. rotate files in destination dir
+2. improve state

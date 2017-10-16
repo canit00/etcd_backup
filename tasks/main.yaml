@@ -1,0 +1,83 @@
+---
+- name: create /opt/reshifter
+  file:
+    path: "{{ reshifter_path }}"
+    state: directory
+
+- name: create LV reshift
+  lvol:
+    vg: "{{ vg }}"
+    lv: reshift
+    size: 5g
+
+- name: format /dev/mapper/<vg_name>-reshift
+  filesystem:
+    fstype: xfs
+    dev: "/dev/mapper/{{ vg }}-reshift"
+
+- name: mount /opt/reshifter
+  mount:
+    path: "{{ reshifter_path }}"
+    src: "/dev/mapper/{{ vg }}-reshift"
+    opts: defaults,norelatime,logbufs=8,logbsize=256k,largeio,inode64,swalloc,allocsize=2M
+    fstype: xfs
+    state: mounted
+
+# Have binary blob storage?
+- name: Download reshifter onto host
+  get_url:
+    url: https://<hostname>:8443/repository/binary/reshifter
+    dest: /usr/local/bin
+    validate_certs: False
+    mode: 0770
+  tags:
+    - bin
+
+- name: copy etcd_backup onto host
+  copy:
+    src: etcd_backup.sh
+    dest: /usr/local/bin
+    owner: root
+    group: root
+    mode: 0770
+  tags:
+    - bin
+
+- name: enable crontab
+  cron:
+    name: backup etcd
+    state: present
+    special_time: daily
+    user: root
+    job: "/usr/local/bin/etcd_backup.sh"
+  tags:
+    - cron
+
+- name: upload Ansible playbook
+  copy:
+    src: pb_etcd_backup.yaml
+    dest: /usr/local/etc/pb_etcd_backup.yaml
+  tags:
+  - ansible
+
+- name: create ansible log file
+  file:
+    dest: /var/log/ansible.log
+    state: touch
+    owner: root
+    group: root
+    mode: 0770
+  tags:
+  - ansible
+
+- name: enable ansible logging
+  lineinfile:
+    path: /etc/ansible/ansible.cfg
+    regexp: '^#log_path \='
+    line: "log_path = /var/log/ansible.log"
+    state: present
+    backrefs: yes
+    backup: yes
+  tags:
+  - ansible
+
