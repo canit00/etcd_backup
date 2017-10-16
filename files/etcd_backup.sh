@@ -25,7 +25,7 @@
 export MAILRC=/dev/null smtp=<smtp_server>
 MAIL=`which mailx`
 LOG=/var/tmp/reshifter-`date +%Y%m%d%M`.log
-DATA_DIR=/root/reshifter
+DATA_DIR=/opt/reshifter
 
 # ENV variables
 export RS_ETCD_CLIENT_CERT=/etc/etcd/peer.crt
