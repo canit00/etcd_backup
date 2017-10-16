@@ -1,0 +1,15 @@
+---
+
+- hosts: all
+  remote_user: <user_here>
+  become: true
+  become_method: sudo
+  gather_facts: false
+
+  vars_prompt:
+  - name: vg
+  prompt: enter volume group name; e.g. docker_vg
+
+  roles:
+    - { role: ../roles/role_reshifter_etcd }
+  
