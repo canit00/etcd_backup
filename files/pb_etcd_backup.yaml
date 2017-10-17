@@ -14,7 +14,7 @@
       path:
         - /etc/origin/master/*.key
         - /etc/origin/master/*.crt
-      dest: "/opt/reshifter/origin-backup-{{ ansible_hostname }}.zip"
+      dest: "{{ etcd_backup_dir }}/origin-backup-{{ ansible_hostname }}.zip"
       format: zip
 
   - name: backup etcd via etcdctl
