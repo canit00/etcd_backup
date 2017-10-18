@@ -1,4 +1,4 @@
-# ansible playbook to backup etcd following OpenShift's documentation
+# ansible playbook to backup etcd following OpenShift's documentation - multiple masters
 # https://docs.openshift.com/container-platform/3.5/admin_guide/backup_restore.html
 # && using reshifter as well
 
